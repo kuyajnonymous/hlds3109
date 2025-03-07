@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  debian32:
+    image: "hlds3109v01:latest"
+    container_name: hlds3109cs13
+    restart: unless-stopped
+    user: "0:0"  # Run as root (consider using a non-root user for security)
+    tty: true
+    stdin_open: true
+#    volumes:
+#      - /opt/cstrike:/server/hlds_l/cstrike #replace with your game mode path
+    ports:
+      - 27015:27015/tcp
+      - 27015:27015/udp
+    command: >
+      ./hlds_run +ip 0.0.0.0 +port 27015 -game cstrike +map de_dust +maxplayers 16 -noauth -insecure +sv_lan 1
+    security_opt:
+      - no-new-privileges:1
