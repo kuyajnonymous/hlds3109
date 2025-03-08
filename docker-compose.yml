@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   debian32:
-    image: "hlds3109v01:latest"
-    container_name: hlds3109cs13
+    image: "hlds3109:latest"
+    container_name: hlds3109
     restart: unless-stopped
     user: "0:0"  # Run as root (consider using a non-root user for security)
     tty: true
