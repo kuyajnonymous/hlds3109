@@ -4,7 +4,7 @@ session_start();
 // ========================
 // Configuration
 // ========================
-$base_dir = '/opt/hlds_l/cstrike/';
+$base_dir = '/server/hlds_l/cstrike/';
 $map_dir = realpath($base_dir . 'maps') . '';
 $addons_dir = realpath($base_dir . 'addons') . '';
 $config_files = ['server.cfg', 'liblist.gam', "motd.txt", "mapcycle.txt", "addons/metamod/plugins.ini", "addons/podbot/podbot.cfg", "addons/podbot/botnames.txt", 'autoexec.cfg'];
