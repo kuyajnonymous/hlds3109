@@ -50,8 +50,13 @@ RUN echo 'int NET_IsReservedAdr(){return 1;}' > /server/hlds_l/nowon.c && \
     ld -shared -o /server/hlds_l/nowon.so /server/hlds_l/nowon.o && \
     rm -f /server/hlds_l/nowon.c /server/hlds_l/nowon.o
 
+# Fix for HLDS bind issue
+RUN gcc -fPIC -c /server/hlds_l/hlds_20040707fix.c -o /server/hlds_l/hlds_20040707fix.o && \
+    ld -shared -o /server/hlds_l/hlds_20040707fix.so /server/hlds_l/hlds_20040707fix.o && \
+    rm -f /server/hlds_l/hlds_20040707fix.o
+
 # Modify hlds_run to include LD_PRELOAD
-RUN sed -i '/^export /a export LD_PRELOAD="nowon.so"' /server/hlds_l/hlds_run
+RUN sed -i '/^export /a export LD_PRELOAD="nowon.so hlds_20040707fix.so"' /server/hlds_l/hlds_run
 
 USER hlds
 
