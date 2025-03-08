@@ -23,16 +23,16 @@ RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_f
     rm /tmp/cs_13_full.tar.gz
 
 # Install Metamod (Ensure directory exists first)
-RUN mkdir -p /server/hlds_l/cstrike/addons/metamod/ && \
-    curl -L -o /tmp/all_in_one_3.2a.zip https://archive.org/download/hlds_l_3111_full_202503/all_in_one_3.2a.zip && \
-    unzip -o /tmp/all_in_one_3.2a.zip -d /server/hlds_l/ && \
-    rm /tmp/all_in_one_3.2a.zip
+#RUN mkdir -p /server/hlds_l/cstrike/addons/metamod/ && \
+#    curl -L -o /tmp/all_in_one_3.2a.zip https://archive.org/download/hlds_l_3111_full_202503/all_in_one_3.2a.zip && \
+#    unzip -o /tmp/all_in_one_3.2a.zip -d /server/hlds_l/ && \
+#    rm /tmp/all_in_one_3.2a.zip
 
 # Install Podbot (Ensure correct extraction path)
-RUN mkdir -p /server/hlds_l/cstrike/addons/podbot/ && \
-    curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_3111_full_202503/podbot_full_V3B22.zip && \
-    unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrike/addons/ && \
-    rm /tmp/podbot_full_V3B22.zip
+#RUN mkdir -p /server/hlds_l/cstrike/addons/podbot/ && \
+#    curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_3111_full_202503/podbot_full_V3B22.zip && \
+#    unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrike/addons/ && \
+#    rm /tmp/podbot_full_V3B22.zip
 
 # Remove unnecessary mod folders
 RUN rm -rf /server/hlds_l/tfc /server/hlds_l/dmc /server/hlds_l/ricochet
@@ -41,7 +41,46 @@ WORKDIR /server/hlds_l/
 
 # Install WON2Fixes and modified HLDS_RUN
 USER root
-COPY config ./
+# Create and overwrite woncomm.lst & valvecomm.lst
+# Create and overwrite woncomm.lst & valvecomm.lst
+RUN echo "\
+Titan\n\
+{\n\
+\ttitan.won2.steamlessproject.nl:6003\n\
+\tcs.techpinoy.net:6003\n\
+}\n\
+\n\
+Auth\n\
+{\n\
+\t// As for now (Oct 2005) this server isn't online yet.\n\
+\tauth.won2.steamlessproject.nl:7002\n\
+}\n\
+\n\
+Master\n\
+{\n\
+\tmaster.won2.steamlessproject.nl:27010\n\
+\tmaster4.won2.steamlessproject.nl:27010\n\
+\tmaster2.won2.steamlessproject.nl:27010\n\
+\tmaster3.won2.steamlessproject.nl:27010\n\
+\thlmaster.order-of-phalanx.net:27010\n\
+\thlmaster2.order-of-phalanx.net:27010\n\
+\thlmaster3.order-of-phalanx.net:27010\n\
+\tcs.techpinoy.net:27010\n\
+}\n\
+\n\
+ModServer\n\
+{\n\
+\tmods.won2.steamlessproject.nl:27011\n\
+\tcs.techpinoy.net:27011\n\
+}\n\
+\n\
+Secure\n\
+{\n\
+\thlauth.won2.steamlessproject.nl:27012\n\
+\thlauth2.won2.steamlessproject.nl:27012\n\
+\thlauth3.won2.steamlessproject.nl:27012\n\
+}" | tee /server/hlds_l/valve/woncomm.lst /server/hlds_l/valve/valvecomm.lst > /dev/null
+
 RUN chmod +x /server/hlds_l/hlds*
 
 # Modify HLDS_RUN for WON2
