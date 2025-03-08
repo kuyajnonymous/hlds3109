@@ -81,6 +81,7 @@ Secure\n\
 \thlauth3.won2.steamlessproject.nl:27012\n\
 }" | tee /server/hlds_l/valve/woncomm.lst /server/hlds_l/valve/valvecomm.lst > /dev/null
 
+COPY patch ./
 RUN chmod +x /server/hlds_l/hlds*
 
 # Modify HLDS_RUN for WON2
