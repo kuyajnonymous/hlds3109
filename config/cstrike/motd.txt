@@ -1,8 +1,4 @@
-You are playing Counter-Strike v1.3
-
-[Welcome to the Server!]
-
- To access Admin commands, you must enter the following command in the console:
+To access Admin commands, you must enter the following command in the console:
 
  Open the console (~) and type:
 /setinfo _pbadminpw cs.techpinoy.net
@@ -15,3 +11,4 @@ After doing this, press "=" in-game to open the Admin commands!
 Have fun and enjoy your stay!
 
 https://cs.techpinoy.net
+-jnonymous
