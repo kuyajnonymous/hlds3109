@@ -3,13 +3,13 @@ version: '3.8'
 services:
   hlds_server:
     image: jnonymous420/hlds3109:latest
-    container_name: hlds3109
+    container_name: hlds1309webserver
     restart: unless-stopped
     user: "0:0"  # Running as root (consider using a non-root user for security)
     tty: true
     stdin_open: true
-#    volumes:
-#      - /opt/hlds_l/cstrike:/server/hlds_l/cstrike # Uncomment to mount a custom cstrike folder
+    volumes:
+      - /opt/hlds3109/hlds_l/cstrike:/server/hlds_l/cstrike # Uncomment to mount a custom cstrike folder
     ports:
       - "27015:27015/udp"
     command: >
@@ -24,7 +24,7 @@ services:
     ports:
       - "27015:80"
     volumes:
-      - /opt/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
+      - /opt/hlds3109/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
     depends_on:
       - php
 
@@ -32,5 +32,4 @@ services:
     image: jnonymous420/hlds1309php:latest  # Using image instead of Dockerfile
     user: "0:0"  # Running as root (consider using a non-root user for security)
     volumes:
-      - /opt/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
-
+      - /opt/hlds3109/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
