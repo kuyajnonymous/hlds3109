@@ -18,7 +18,7 @@ services:
       - no-new-privileges:1
 
   web:
-    image: jnonymous420/hlds1309webserver_web:latest  # Using image instead of Dockerfile
+    image: jnonymous420/hlds1309web:latest  # Using image instead of Dockerfile
     container_name: hlds_web
     user: "0:0"  # Running as root (consider using a non-root user for security)
     ports:
@@ -29,7 +29,7 @@ services:
       - php
 
   php:
-    image: jnonymous420/hlds1309webserver_php:latest  # Using image instead of Dockerfile
+    image: jnonymous420/hlds1309php:latest  # Using image instead of Dockerfile
     user: "0:0"  # Running as root (consider using a non-root user for security)
     volumes:
       - /opt/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
