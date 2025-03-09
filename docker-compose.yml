@@ -1,19 +1,36 @@
 version: '3.8'
 
 services:
-  debian32:
-    image: "hlds3109:latest"
+  hlds_server:
+    image: jnonymous420/hlds3109:latest
     container_name: hlds3109
     restart: unless-stopped
-    user: "0:0"  # Run as root (consider using a non-root user for security)
+    user: "0:0"  # Running as root (consider using a non-root user for security)
     tty: true
     stdin_open: true
 #    volumes:
-#      - /opt/cstrike:/server/hlds_l/cstrike #replace with your game mode path
+#      - /opt/hlds_l/cstrike:/server/hlds_l/cstrike # Uncomment to mount a custom cstrike folder
     ports:
-      - 27015:27015/tcp
-      - 27015:27015/udp
+      - "27015:27015/udp"
     command: >
       ./hlds_run +ip 0.0.0.0 +port 27015 -game cstrike +map de_dust +maxplayers 16 -noauth -insecure +sv_lan 1
     security_opt:
       - no-new-privileges:1
+
+  web:
+    image: jnonymous420/hlds1309webserver_web:latest  # Using image instead of Dockerfile
+    container_name: hlds_web
+    user: "0:0"  # Running as root (consider using a non-root user for security)
+    ports:
+      - "27015:80"
+    volumes:
+      - /opt/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
+    depends_on:
+      - php
+
+  php:
+    image: jnonymous420/hlds1309webserver_php:latest  # Using image instead of Dockerfile
+    user: "0:0"  # Running as root (consider using a non-root user for security)
+    volumes:
+      - /opt/hlds_l/cstrike:/app/public/cstrike # Uncomment to mount a custom cstrike folder
+
