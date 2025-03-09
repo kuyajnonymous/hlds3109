@@ -34,9 +34,9 @@ RUN curl -L -o /tmp/hlds_l_3109_full.tar.gz https://archive.org/download/hlds_l_
 	
 # Download and install Counter-Strike 1.5
 RUN curl -L -o /tmp/cs_15_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_15_full.tar.gz && \
-    tar -xzf /tmp/cs_15_full.tar.gz -C /server/hlds_l/15 && \
-	mv -f /server/hlds_l/15/cstrike/* /server/hlds_l/cstrk15/ && \
-    rm /tmp/cs_15_full.tar.gz /server/hlds_l/15
+    tar -xzf /tmp/cs_15_full.tar.gz -C /server/hlds_l/cstrk15 && \
+	mv -f //server/hlds_l/cstrk15/cstrike/* /server/hlds_l/cstrk15/ && \
+    rm /tmp/cs_15_full.tar.gz
 
 # Download and install Counter-Strike 1.3
 RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_13_full.tar.gz && \
@@ -46,7 +46,7 @@ RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_f
 
 
 # Remove unnecessary mod folders
-RUN rm -rf /server/hlds_l/tfc /server/hlds_l/dmc /server/hlds_l/ricochet
+RUN rm -rf /server/hlds_l/tfc /server/hlds_l/dmc /server/hlds_l/ricochet  /server/hlds_l/cstrk15/cstrike
 
 WORKDIR /server/hlds_l/
 
