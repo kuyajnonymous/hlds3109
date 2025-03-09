@@ -92,6 +92,7 @@ Secure\n\
 \thlauth3.won2.steamlessproject.nl:27012\n\
 }" | tee /server/hlds_l/valve/woncomm.lst /server/hlds_l/valve/valvecomm.lst > /dev/null
 
+
 COPY config ./
 COPY config/cstrike ./cstrk15/
 RUN chmod +x /server/hlds_l/hlds*
@@ -104,7 +105,16 @@ RUN echo 'int NET_IsReservedAdr(){return 1;}' > /server/hlds_l/nowon.c && \
 
 # Modify hlds_run to include LD_PRELOAD
 RUN sed -i '/^export /a export LD_PRELOAD="nowon.so"' /server/hlds_l/hlds_run
+RUN touch /server/hlds_l/cstrike/server.cfg /server/hlds_l/cstrike/listenserver.cfg && \
+    chmod 666 /server/hlds_l/cstrike/server.cfg /server/hlds_l/cstrike/listenserver.cfg && \
+    sed -i '/\/\/hostname/a\hostname "PASAY 24/7 CS 1.3"' /server/hlds_l/cstrike/listenserver.cfg \
+    && sed -i '/\/\/hostname/a\hostname "PASAY 24/7 CS 1.3"' /server/hlds_l/cstrike/server.cfg	
 
+RUN touch /server/hlds_l/cstrk15/server.cfg /server/hlds_l/cstrk15/listenserver.cfg && \
+    chmod 666 /server/hlds_l/cstrk15/server.cfg /server/hlds_l/cstrk15/listenserver.cfg && \
+    sed -i '/\/\/hostname/a\hostname "PASAY 24/7 CS 1.5"' /server/hlds_l/cstrk15/listenserver.cfg \
+    && sed -i '/\/\/hostname/a\hostname "PASAY 24/7 CS 1.5"' /server/hlds_l/cstrk15/server.cfg	
+    
 USER hlds
 
 ENV TERM xterm
