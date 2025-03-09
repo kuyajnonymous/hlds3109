@@ -11,17 +11,6 @@ RUN apt-get update -o Acquire::Check-Valid-Until=false && \
 RUN groupadd -r hlds && useradd --no-log-init --system --create-home --home-dir /server --gid hlds hlds
 USER hlds
 
-# Download and extract HLDS
-RUN curl -L -o /tmp/hlds_l_3109_full.tar.gz https://archive.org/download/hlds_l_3111_full/hlds_l_3109_full.tar.gz && \
-    mkdir -p /server/hlds_l/ && \
-    tar -xzf /tmp/hlds_l_3109_full.tar.gz -C /server/ && \
-    rm /tmp/hlds_l_3109_full.tar.gz
-
-# Download and install Counter-Strike 1.3
-RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_13_full.tar.gz && \
-    tar -xzf /tmp/cs_13_full.tar.gz -C /server/hlds_l/ && \
-    rm /tmp/cs_13_full.tar.gz
-
 # Install Metamod (Ensure directory exists first)
 RUN mkdir -p /server/hlds_l/cstrike/addons/metamod/ && \
     curl -L -o /tmp/all_in_one_3.2a.zip https://archive.org/download/hlds_l_3111_full_202503/all_in_one_3.2a.zip && \
@@ -33,6 +22,28 @@ RUN mkdir -p /server/hlds_l/cstrike/addons/podbot/ && \
     curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_3111_full_202503/podbot_full_V3B22.zip && \
     unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrike/addons/ && \
     rm /tmp/podbot_full_V3B22.zip
+	
+RUN mkdir -p /server/hlds_l/cstrk15/addons/
+RUN cp -r -f /server/hlds_l/cstrike/addons /server/hlds_l/cstrk15/
+
+# Download and extract HLDS
+RUN curl -L -o /tmp/hlds_l_3109_full.tar.gz https://archive.org/download/hlds_l_3111_full/hlds_l_3109_full.tar.gz && \
+    mkdir -p /server/hlds_l/ && \
+    tar -xzf /tmp/hlds_l_3109_full.tar.gz -C /server/ && \
+    rm /tmp/hlds_l_3109_full.tar.gz
+	
+# Download and install Counter-Strike 1.5
+RUN curl -L -o /tmp/cs_15_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_15_full.tar.gz && \
+    tar -xzf /tmp/cs_15_full.tar.gz -C /server/hlds_l/15 && \
+	mv -f /server/hlds_l/15/cstrike/* /server/hlds_l/cstrk15/ && \
+    rm /tmp/cs_15_full.tar.gz /server/hlds_l/15
+
+# Download and install Counter-Strike 1.3
+RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_13_full.tar.gz && \
+    tar -xzf /tmp/cs_13_full.tar.gz -C /server/hlds_l/ && \
+    rm /tmp/cs_13_full.tar.gz
+
+
 
 # Remove unnecessary mod folders
 RUN rm -rf /server/hlds_l/tfc /server/hlds_l/dmc /server/hlds_l/ricochet
@@ -82,6 +93,7 @@ Secure\n\
 }" | tee /server/hlds_l/valve/woncomm.lst /server/hlds_l/valve/valvecomm.lst > /dev/null
 
 COPY config ./
+COPY config/cstrike ./cstrk15/
 RUN chmod +x /server/hlds_l/hlds*
 
 # Modify HLDS_RUN for WON2
