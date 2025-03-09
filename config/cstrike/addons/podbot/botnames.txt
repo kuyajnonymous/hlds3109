@@ -1,0 +1,124 @@
+# This file contains all bot names which are used if you don't
+# specify a name using "addbot".
+# There must be at least 9 names in here and you're allowed a maximum
+# of 20 chars for the name! Why? The "E[POD]" will be
+# placed before the name and the skill may be appended...
+# You can use 6 letters more if you turn off either SkillDisplay 
+# or ClanTags. If you turn off both you can use 32 letters for the 
+# name. Some characters, that normally are allowed for names in CS 
+# cannot be used here (e.g. "+") - The name will just stay unused.
+#
+# Line below contains 20+6+6 chars as a marker for you
+#2345678901234567890+++++6+++++6
+
+mytch
+keysia
+kindred
+shames
+jammypotpot
+feiyen
+kiroz
+v1|2u$
+jnonymous
+techpinoy
+TakyoX
+Denmark.exe
+JeyuSnipez
+GasD1nero
+ZephyrKenz
+LexStryker
+CyrusOnFire
+Rhoystorm
+ReaperFelipe
+JavyNotJoker
+KeysiaFlare
+DherfStriker
+NayrXtreme
+EchoKaye
+EdoSpecter
+RonjayNova
+BurkeVX
+KeiShadow
+DrizzyDagger
+MarlonVortex
+ZhairousBlade
+TeejayFrost
+PapaEdge101
+N1ghtJester
+PerpzWarden
+ArjayLocke
+StevenXpress
+MalekaiGhost
+JizoRampage
+KoratzPrime
+ReyFiesta
+DarrelViper
+JoelRiot
+MikeeZero
+KenzoFury
+PjayRevenger
+JiggsLethal
+SmojInferno
+AngelVindicator
+ZandySpectre
+RavEnigma
+LucastroVenom
+ArvinRequiem
+RandyChaos
+ZevahcStormborn
+LexOblivion
+IanPhantom
+JuliusRenegade
+CrimsonJoel
+PhantomMarc
+CountFloyd
+LoRe
+Botman
+V0id
+judas
+THE STORM
+ChickenMcPOD
+Kain
+another1
+quirry
+Kay-Kay
+Psyke
+ReBlurb
+Noonian
+East
+killaruna
+Jumpman
+DarkFighter
+Clubmaster
+Ninja
+Aspirin
+Ditlew
+Polymorph
+Redeemer
+RedFox
+Pseudolukian
+t3<hN0
+xEcutor
+Pasta
+SaMsOn98
+Gooseman
+VasilyPupkin
+pL-F
+William
+cliffe
+SAS
+Steve
+TAZ
+MarD
+AxelRose
+Spawn
+Mario
+ISD
+MrMuck
+Pierre
+botmeister
+Whistler
+Elitejavi
+Shrike
+Rick
+Markus
