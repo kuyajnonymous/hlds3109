@@ -30,8 +30,6 @@ RUN curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_31
 #RUN curl -L -o /tmp/metamod.tar.gz "https://sourceforge.net/projects/metamod/files/Metamod%20Binaries/1.20/metamod-1.20-linux.tar.gz/download"
 #COPY files/metamod.tar.gz /tmp/metamod.tar.gz
 
-
-
 # Download and extract HLDS
 RUN mkdir -p /server/hlds_l/ && \
     tar -xzf /tmp/hlds_l_3109_full.tar.gz -C /server/
