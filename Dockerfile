@@ -17,16 +17,22 @@ USER hlds
 # Download all necessary files
 RUN curl -L -o /tmp/hlds_l_3109_full.tar.gz https://archive.org/download/hlds_l_3111_full/hlds_l_3109_full.tar.gz
 #COPY files/hlds_l_3109_full.tar.gz /tmp/hlds_l_3109_full.tar.gz
+
 RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_13_full.tar.gz
 #COPY files/cs_13_full.tar.gz /tmp/cs_13_full.tar.gz
+
 RUN curl -L -o /tmp/cs_15_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_15_full.tar.gz
-COPY files/cs_15_full.tar.gz /tmp/cs_15_full.tar.gz
+#COPY files/cs_15_full.tar.gz /tmp/cs_15_full.tar.gz
+
 #RUN curl -L -o /tmp/amxmodx-base.tar.gz https://www.amxmodx.org/release/amxmodx-1.8.2-base-linux.tar.gz
 #COPY files/amxmodx-base.tar.gz /tmp/amxmodx-base.tar.gz
+
 #RUN curl -L -o /tmp/amxmodx-cstrike.tar.gz https://www.amxmodx.org/release/amxmodx-1.8.2-cstrike-linux.tar.gz
 #COPY files/amxmodx-base.tar.gz /tmp/amxmodx-cstrike.tar.gz
-RUN curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_3111_full_202503/podbot_full_V3B22.zip
+
+#RUN curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_3111_full_202503/podbot_full_V3B22.zip
 #COPY files/podbot_full_V3B22.zip /tmp/podbot_full_V3B22.zip
+
 #RUN curl -L -o /tmp/metamod.tar.gz "https://sourceforge.net/projects/metamod/files/Metamod%20Binaries/1.20/metamod-1.20-linux.tar.gz/download"
 #COPY files/metamod.tar.gz /tmp/metamod.tar.gz
 
@@ -59,10 +65,10 @@ RUN  echo 'gamedll_linux "addons/metamod/dlls/metamod_i386.so"' >> /server/hlds_
 #	echo "linux addons/amxmodx/dlls/amxmodx_mm_i386.so" >> /server/hlds_l/cstrike/addons/metamod/plugins.ini
 
 # Install Podbot (Ensure correct extraction path)
-RUN mkdir -p /server/hlds_l/cstrike/addons/podbot/ && \
-    mkdir -p /server/hlds_l/cstrk15/addons/podbot/ && \
-    unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrike/addons/ && \
-    unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrk15/addons/
+#RUN mkdir -p /server/hlds_l/cstrike/addons/podbot/ && \
+#    mkdir -p /server/hlds_l/cstrk15/addons/podbot/ && \
+#    unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrike/addons/ && \
+#    unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrk15/addons/
 #	echo "linux addons/podbot/podbot_mm_i386.so" >> /server/hlds_l/cstrike/addons/metamod/plugins.ini
 	
 
@@ -141,14 +147,10 @@ RUN echo 'int NET_IsReservedAdr(){return 1;}' > /server/hlds_l/nowon.c && \
 
 # Modify hlds_run to include LD_PRELOAD
 RUN sed -i '/^export /a export LD_PRELOAD="nowon.so"' /server/hlds_l/hlds_run
-RUN touch /server/hlds_l/cstrike/listenserver.cfg && \
-	touch /server/hlds_l/cstrike/server.cfg && \ 
-	sed -i '/^hostname /c\hostname "PHILIPPINES 24/7 CS 1.3"' /server/hlds_l/cstrike/listenserver.cfg && \
+RUN	sed -i '/^hostname /c\hostname "PHILIPPINES 24/7 CS 1.3"' /server/hlds_l/cstrike/listenserver.cfg && \
     sed -i '/^hostname /c\hostname "PHILIPPINES 24/7 CS 1.3"' /server/hlds_l/cstrike/server.cfg
 	
-RUN touch /server/hlds_l/cstrk15/listenserver.cfg && \
-	touch /server/hlds_l/cstrk15/server.cfg && \ 
-	sed -i '/^hostname /c\hostname "PHILIPPINES 24/7 CS 1.5"' /server/hlds_l/cstrk15/listenserver.cfg && \
+RUN	sed -i '/^hostname /c\hostname "PHILIPPINES 24/7 CS 1.5"' /server/hlds_l/cstrk15/listenserver.cfg && \
     sed -i '/^hostname /c\hostname "PHILIPPINES 24/7 CS 1.5"' /server/hlds_l/cstrk15/server.cfg
 
 	
