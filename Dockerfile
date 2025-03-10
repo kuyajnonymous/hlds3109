@@ -20,22 +20,26 @@ RUN curl -L -o /tmp/hlds_l_3109_full.tar.gz https://archive.org/download/hlds_l_
 RUN curl -L -o /tmp/cs_13_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_13_full.tar.gz
 #COPY files/cs_13_full.tar.gz /tmp/cs_13_full.tar.gz
 RUN curl -L -o /tmp/cs_15_full.tar.gz https://archive.org/download/hlds_l_3111_full_202503/cs_15_full.tar.gz
-#COPY files/cs_15_full.tar.gz /tmp/cs_15_full.tar.gz
-RUN curl -L -o /tmp/amxmodx-base.tar.gz https://www.amxmodx.org/release/amxmodx-1.8.2-base-linux.tar.gz
+COPY files/cs_15_full.tar.gz /tmp/cs_15_full.tar.gz
+#RUN curl -L -o /tmp/amxmodx-base.tar.gz https://www.amxmodx.org/release/amxmodx-1.8.2-base-linux.tar.gz
 #COPY files/amxmodx-base.tar.gz /tmp/amxmodx-base.tar.gz
-RUN curl -L -o /tmp/amxmodx-cstrike.tar.gz https://www.amxmodx.org/release/amxmodx-1.8.2-cstrike-linux.tar.gz
+#RUN curl -L -o /tmp/amxmodx-cstrike.tar.gz https://www.amxmodx.org/release/amxmodx-1.8.2-cstrike-linux.tar.gz
 #COPY files/amxmodx-base.tar.gz /tmp/amxmodx-cstrike.tar.gz
 RUN curl -L -o /tmp/podbot_full_V3B22.zip https://archive.org/download/hlds_l_3111_full_202503/podbot_full_V3B22.zip
 #COPY files/podbot_full_V3B22.zip /tmp/podbot_full_V3B22.zip
 #RUN curl -L -o /tmp/metamod.tar.gz "https://sourceforge.net/projects/metamod/files/Metamod%20Binaries/1.20/metamod-1.20-linux.tar.gz/download"
 #COPY files/metamod.tar.gz /tmp/metamod.tar.gz
 
+
+
 # Download and extract HLDS
 RUN mkdir -p /server/hlds_l/ && \
     tar -xzf /tmp/hlds_l_3109_full.tar.gz -C /server/
+
 	
 # Download and install Counter-Strike 1.3
 RUN tar -xzf /tmp/cs_13_full.tar.gz -C /server/hlds_l/
+	
 	
 # Download and install Counter-Strike 1.5
 RUN mkdir -p /server/hlds_l/cstrk15 && \
@@ -44,29 +48,34 @@ RUN mkdir -p /server/hlds_l/cstrk15 && \
     rm -rf /server/hlds_l/cstrk15/cstrike
 
 # Install Metamod
-#RUN mkdir -p /server/hlds_l/cstrike/addons/metamod
+#RUN mkdir -p /server/hlds_l/cstrike/addons/metamod/dlls && \
 #    tar -xzf /tmp/metamod.tar.gz -C /server/hlds_l/cstrike/addons/metamod/dlls && \
 #    sed -i '/^gamedll_linux/s/^/\/\//' /server/hlds_l/cstrike/liblist.gam && \
 RUN  echo 'gamedll_linux "addons/metamod/dlls/metamod_i386.so"' >> /server/hlds_l/cstrike/liblist.gam
 	
 # AMXModX 1.9
-RUN tar -zxvf /tmp/amxmodx-base.tar.gz -C /server/hlds_l/cstrike && \
-    tar -zxvf /tmp/amxmodx-cstrike.tar.gz -C /server/hlds_l/cstrike
-#   echo "linux addons/amxmodx/dlls/amxmodx_mm_i386.so" >> /server/hlds_l/cstrike/addons/metamod/plugins.ini
+#RUN tar -zxvf /tmp/amxmodx-base.tar.gz -C /server/hlds_l/cstrike && \
+#   tar -zxvf /tmp/amxmodx-cstrike.tar.gz -C /server/hlds_l/cstrike
+#	echo "linux addons/amxmodx/dlls/amxmodx_mm_i386.so" >> /server/hlds_l/cstrike/addons/metamod/plugins.ini
 
 # Install Podbot (Ensure correct extraction path)
 RUN mkdir -p /server/hlds_l/cstrike/addons/podbot/ && \
     mkdir -p /server/hlds_l/cstrk15/addons/podbot/ && \
     unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrike/addons/ && \
     unzip -o /tmp/podbot_full_V3B22.zip -d /server/hlds_l/cstrk15/addons/
-#   echo "linux addons/podbot/podbot_mm_i386.so" >> /server/hlds_l/cstrike/addons/metamod/plugins.ini
+#	echo "linux addons/podbot/podbot_mm_i386.so" >> /server/hlds_l/cstrike/addons/metamod/plugins.ini
 	
+
 #RUN cp -r -f /server/hlds_l/cstrike/addons /server/hlds_l/cstrk15/
 RUN cp -f /server/hlds_l/cstrike/liblist.gam /server/hlds_l/cstrk15/liblist.gam
 
 #CS 1.3/1.5 PATCH
 RUN mkdir -p /server/hlds_l/cstrike/addons/
 RUN mkdir -p /server/hlds_l/cstrk15/addons/
+COPY config/cs13_workingaddons.zip /tmp/cs13_workingaddons.zip 
+RUN unzip -o /tmp/cs13_workingaddons.zip -d /server/hlds_l/cstrike/addons/
+COPY config/cs15_workingaddons.zip /tmp/cs15_workingaddons.zip 
+RUN unzip -o /tmp/cs15_workingaddons.zip -d /server/hlds_l/cstrk15/addons/
 COPY config/cs13addons /server/hlds_l/cstrike/addons/
 COPY config/cs15addons /server/hlds_l/cstrk15/addons/
 COPY config/cs_cfg /server/hlds_l/cstrk15/
