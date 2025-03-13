@@ -59,27 +59,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
 }
 if (!isset($_SESSION['authenticated'])) {
     ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>Login - Config Editor</title>
-      <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        input[type="password"] { padding: 10px; font-size: 16px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-        .error { color: red; }
-      </style>
-    </head>
-    <body>
+    
+
       <h2>🔒 Enter Password</h2>
       <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
       <form method="post">
           <input type="password" name="password" required autofocus>
           <button type="submit">Login</button>
       </form>
-    </body>
-    </html>
+
     <?php
     exit;
 }
@@ -88,9 +76,9 @@ if (!isset($_SESSION['authenticated'])) {
 // Server Paths & Config Files Arrays
 // -------------------------------
 $serverPaths = [
-    "hlserver_bots_cstrike"   => "hlds_l/cstrike/",
-    "hlserver_bots_cstrike15" => "hlds_l/cstrike15/",
-    "hlserver_bots_cstrk15"   => "hlds_l/cstrk15/"
+    "cstechpinoy"   => "hlds_l/cstrike/"
+//    "cstechpinoy15" => "hlds_l/cstrike15/",
+//    "hlserver_bots_cstrk15"   => "hlds_l/cstrk15/"
 ];
 
 $configFiles = [
@@ -364,7 +352,7 @@ if (isset($_GET['action']) && $_GET['action'] == "loadService" && isset($_GET['f
     $serviceMapping = [
          "hlserver_cstrike"      => "/etc/systemd/system/start_cs13.service",
          "hlserver_cstrk15"      => "/etc/systemd/system/start_cs15.service",
-         "hlserver_bots_cstrike" => "/etc/systemd/system/start_cs13bots.service",
+         "cstechpinoy" => "/etc/systemd/system/start_cs13bots.service",
          "hlserver_bots_cstrk15" => "/etc/systemd/system/start_cs15bots.service",
     ];
     if (!isset($serviceMapping[$folderKey])) {
@@ -384,11 +372,50 @@ if (isset($_GET['action']) && $_GET['action'] == "loadService" && isset($_GET['f
     exit;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Game Server Config Editor</title>
+<?php
+$server_id = "6bd4532a7f96"; // Change this to your game server container ID
+
+// Function to check the game server status
+function getServerStatus($server_id) {
+    $output = shell_exec("/usr/bin/docker ps -q -f id=$server_id");
+    return trim($output) ? "running" : "stopped";
+}
+
+// Function to get server logs with newest logs on top
+function getServerLogs($server_id, $lines = 20) {
+    $output = shell_exec("/usr/bin/docker logs --tail $lines $server_id 2>&1");
+    $logLines = explode("\n", trim($output));
+    $logLines = array_reverse($logLines); // Reverse to show new logs on top
+    $reversedOutput = implode("\n", $logLines);
+    return nl2br(htmlspecialchars($reversedOutput)); // Prevent XSS
+}
+
+// If logs are requested via AJAX, return only logs and exit
+if (isset($_GET["logs"])) {
+    echo getServerLogs($server_id);
+    exit;
+}
+
+// Handle button clicks
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $action = $_POST["action"];
+    if ($action === "start") {
+        shell_exec("/usr/bin/docker start $server_id");
+    } elseif ($action === "stop") {
+        shell_exec("/usr/bin/docker stop $server_id");
+    } elseif ($action === "restart") {
+        shell_exec("/usr/bin/docker restart $server_id");
+    }
+    // Refresh status after action
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+// Get current status and logs
+$status = getServerStatus($server_id);
+$logs = getServerLogs($server_id);
+$light_color = $status === "running" ? "🟢" : "🔴";
+?>
   <style>
     /* Responsive, full-page layout */
     html, body {
@@ -936,7 +963,19 @@ if (isset($_GET['action']) && $_GET['action'] == "loadService" && isset($_GET['f
       loadFileList();
     }
   </script>
-</head>
+      <script>
+        function refreshLogs() {
+            fetch("<?php echo $_SERVER['PHP_SELF']; ?>?logs=1")
+                .then(response => response.text())
+                .then(data => {
+                    let logDiv = document.getElementById("logs");
+                    logDiv.innerHTML = data;
+                    logDiv.scrollTop = 0; // Scroll to the top to show newest logs
+                });
+        }
+        setInterval(refreshLogs, 5000); // Refresh logs every 5 seconds
+        window.onload = refreshLogs; // Load logs immediately
+    </script>
 <body>
 <div id="themeWrapper" class="theme-default">
   <!-- Top Bar -->
@@ -970,10 +1009,12 @@ if (isset($_GET['action']) && $_GET['action'] == "loadService" && isset($_GET['f
     <!-- Left Column: File Manager Container -->
     <div class="left-column">
       <div class="file-manager-container">
-        <form method="post" onsubmit="event.preventDefault(); let folderName=this.newfolder.value; fetch(window.location.pathname + '?s=' + encodeURIComponent(document.getElementById('serverFolder').value) + '&path=' + encodeURIComponent('<?= $currentSubPath ?>'), { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'newfolder=' + encodeURIComponent(folderName) }).then(() => { logMessage('Creating folder: ' + folderName); loadFileList(); });">
-          <input type="text" name="newfolder" placeholder="New Folder Name" required>
-          <button type="submit">Create Folder</button>
-        </form>
+    <h2>Game Server Status: <?php echo $light_color . " " . ucfirst($status); ?></h2>
+    <form method="post">
+        <button type="submit" name="action" value="start">Start Server</button>
+        <button type="submit" name="action" value="stop">Stop Server</button>
+        <button type="submit" name="action" value="restart">Restart Server</button>
+    </form>
         <div id="drop-area">
           <p>Drag & Drop files here or click to upload</p>
           <input type="file" id="fileInput" style="display: none;">
@@ -1006,7 +1047,9 @@ if (isset($_GET['action']) && $_GET['action'] == "loadService" && isset($_GET['f
         <button onclick="saveFile()">Save Changes</button>
       </div>
       <div class="logs-container">
+	  <div id="logs"></div>
         <div id="log"></div>
+		
       </div>
     </div>
   </div>
